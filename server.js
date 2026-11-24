@@ -55,7 +55,7 @@ app.put("/teas/:id", (req, res) => {
         res.status(404).json({error : "Tea not found!"});
     }
     teas[pos] = {id, name, category};
-    res.json(teas[pos]);
+    return res.json(teas[pos]);
 });
 
 app.patch("/teas/:id", (req, res) => {
@@ -67,7 +67,17 @@ app.patch("/teas/:id", (req, res) => {
     }
     if (name != undefined) tea.name = name;
     if (category != undefined) tea.category = category;
-    res.json(tea);
+    return res.json(tea);
+});
+
+app.delete("/teas/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const pos = teas.findIndex(t => t.id === id);
+    if (pos === -1) {
+        res.status(404).json({error : "Tea not found!"});
+    }
+    teas.splice(pos, 1);
+    return res.status(404).send();
 });
 
 app.listen(port, () => {
