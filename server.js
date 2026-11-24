@@ -1,17 +1,37 @@
-// server.js
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
 
-// Import the built-in 'http' module
-const http = require('http');
+const teas = [
+    { id: 1, name: "Earl Grey", category: "Black Tea" },
+    { id: 2, name: "Sencha", category: "Green Tea" },
+    { id: 3, name: "Chamomile", category: "Herbal Tea" },
+    { id: 4, name: "English Breakfast", category: "Black Tea" },
+    { id: 5, name: "Peppermint", category: "Herbal Tea" },
+    { id: 6, name: "Matcha", category: "Green Tea" },
+    { id: 7, name: "Silver Needle", category: "White Tea" },
+    { id: 8, name: "Rooibos", category: "Herbal Tea" },
+    { id: 9, name: "Tie Guan Yin", category: "Oolong Tea" },
+    { id: 10, name: "Darjeeling", category: "Black Tea" }
+];
 
-// Create a simple HTTP server
-const server = http.createServer((req, res) => {
-  // Set the response header
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-   // Send the response text
-  res.end('Hello World\n');
+app.get("/", (req, res) => {
+    res.send("Hello Thomas Griesmayer!");
 });
 
-// The server will listen on port 3000
-server.listen(3000, () => {
-  console.log('Server is running at http://localhost:3000');
+app.get("/teas", (req, res) => {
+    res.json(teas);
+});
+
+app.get("/teas/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const tea = teas.find(t => t.id === id);
+    if (!tea) {
+        res.status(404).json({error : "Tea not found!"});
+    }
+    res.json(tea);
+});
+
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });
