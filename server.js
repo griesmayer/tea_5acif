@@ -1,7 +1,8 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
 const teas = [
     { id: 1, name: "Earl Grey", category: "Black Tea" },
@@ -34,7 +35,8 @@ app.get("/teas/:id", (req, res) => {
 });
 
 app.post("/teas", (req, res) => {
-    const {name, category} = req.body;
+    const name = req.body.name;
+    const category = req.body.category;
     if (!name || !category) {
         return res.status(400).json({error: "Name and category is required!"});
     }
